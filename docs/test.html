@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookmark Manager - Test Suite</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #3498db;
+        }
+        .test-pass {
+            border-left-color: #27ae60;
+        }
+        .test-fail {
+            border-left-color: #e74c3c;
+        }
+        .test-title {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .test-result {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .pass {
+            background: #d4edda;
+            color: #155724;
+        }
+        .fail {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .summary {
+            margin-top: 30px;
+            padding: 20px;
+            background: #ecf0f1;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        .summary strong {
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Bookmark Manager - Test Suite</h1>
+    <div id="testResults"></div>
+    <div class="summary" id="summary"></div>
+
+    <!-- Include DSA implementations -->
+    <script src="dsa/hashTable.js"></script>
+    <script src="dsa/trie.js"></script>
+    <script src="dsa/linkedList.js"></script>
+    <script src="dsa/minHeap.js"></script>
+
+    <script>
+        const results = [];
+        
+        function addTest(name, passed, details) {
+            results.push({ name, passed, details });
+            const container = document.getElementById('testResults');
+            const testDiv = document.createElement('div');
+            testDiv.className = `test-container ${passed ? 'test-pass' : 'test-fail'}`;
+            testDiv.innerHTML = `
+                <div class="test-title">${passed ? '✅' : '❌'} ${name}</div>
+                <div class="test-result ${passed ? 'pass' : 'fail'}">${details}</div>
+            `;
+            container.appendChild(testDiv);
+        }
+
+        function runTests() {
+            // Test 1: Hash Table
+            try {
+                const ht = new HashTable(10);
+                ht.put('https://github.com', { title: 'GitHub', visitCount: 0 });
+                ht.put('https://stackoverflow.com', { title: 'Stack Overflow', visitCount: 0 });
+                
+                const github = ht.get('https://github.com');
+                if (github && github.title === 'GitHub') {
+                    addTest('Hash Table: Insert & Retrieve', true, 
+                        `Successfully inserted and retrieved: ${github.title}`);
+                } else {
+                    addTest('Hash Table: Insert & Retrieve', false, 
+                        `Failed to retrieve bookmark`);
+                }
+
+                // Test Hash Table Delete
+                ht.delete('https://github.com');
+                const deleted = ht.get('https://github.com');
+                if (deleted === null) {
+                    addTest('Hash Table: Delete', true, 
+                        `Successfully deleted bookmark`);
+                } else {
+                    addTest('Hash Table: Delete', false, 
+                        `Failed to delete bookmark`);
+                }
+            } catch(e) {
+                addTest('Hash Table: Insert & Retrieve', false, `Error: ${e.message}`);
+            }
+
+            // Test 2: Trie
+            try {
+                const trie = new Trie();
+                trie.insert('GitHub', 'https://github.com');
+                trie.insert('GitLab', 'https://gitlab.com');
+                trie.insert('Google', 'https://google.com');
+
+                const results = trie.searchByPrefix('Git');
+                if (results.length >= 2) {
+                    addTest('Trie: Autocomplete Prefix Search', true, 
+                        `Found ${results.length} bookmarks with prefix 'Git': ${results.map(r => r.word).join(', ')}`);
+                } else {
+                    addTest('Trie: Autocomplete Prefix Search', false, 
+                        `Expected at least 2 results, got ${results.length}`);
+                }
+
+                // Test Exact Search
+                const exactSearch = trie.search('github');
+                if (exactSearch) {
+                    addTest('Trie: Exact Word Search', true, 
+                        `Successfully found 'github' in trie`);
+                } else {
+                    addTest('Trie: Exact Word Search', false, 
+                        `Failed to find 'github' in trie`);
+                }
+            } catch(e) {
+                addTest('Trie: Basic Operations', false, `Error: ${e.message}`);
+            }
+
+            // Test 3: Linked List
+            try {
+                const ll = new LinkedList(5);
+                const bm1 = { title: 'GitHub', url: 'https://github.com', visitCount: 1 };
+                const bm2 = { title: 'Stack Overflow', url: 'https://stackoverflow.com', visitCount: 2 };
+                const bm3 = { title: 'MDN', url: 'https://mdn.org', visitCount: 1 };
+
+                ll.insertAtBeginning(bm1);
+                ll.insertAtBeginning(bm2);
+                ll.insertAtBeginning(bm3);
+
+                const all = ll.getAll();
+                if (all.length === 3 && all[0].title === 'MDN') {
+                    addTest('Linked List: Insert & Order', true, 
+                        `Correctly inserted ${all.length} items. Most recent: ${all[0].title}`);
+                } else {
+                    addTest('Linked List: Insert & Order', false, 
+                        `Items not in correct order. Got: ${all.map(b => b.title).join(', ')}`);
+                }
+
+                // Test moveToFront
+                ll.moveToFront('https://github.com');
+                const afterMove = ll.getAll();
+                if (afterMove[0].title === 'GitHub') {
+                    addTest('Linked List: Move to Front', true, 
+                        `Successfully moved GitHub to front`);
+                } else {
+                    addTest('Linked List: Move to Front', false, 
+                        `Failed to move GitHub to front. Front is: ${afterMove[0].title}`);
+                }
+            } catch(e) {
+                addTest('Linked List: Basic Operations', false, `Error: ${e.message}`);
+            }
+
+            // Test 4: Min Heap
+            try {
+                const heap = new MinHeap();
+                heap.insert({ title: 'A', url: 'a.com', visitCount: 5 });
+                heap.insert({ title: 'B', url: 'b.com', visitCount: 2 });
+                heap.insert({ title: 'C', url: 'c.com', visitCount: 8 });
+                heap.insert({ title: 'D', url: 'd.com', visitCount: 1 });
+
+                const min = heap.peek();
+                if (min && min.visitCount === 1 && min.title === 'D') {
+                    addTest('Min Heap: Insert & Min Property', true, 
+                        `Correctly identified minimum: ${min.title} with ${min.visitCount} visits`);
+                } else {
+                    addTest('Min Heap: Insert & Min Property', false, 
+                        `Min property violated. Min: ${min ? min.title : 'null'}`);
+                }
+
+                // Test update and getLeastVisited
+                const leastVisited = heap.getLeastVisited(2);
+                if (leastVisited.length >= 1 && leastVisited[0].visitCount <= 2) {
+                    addTest('Min Heap: Get Least Visited', true, 
+                        `Got ${leastVisited.length} least visited: ${leastVisited.map(b => `${b.title}(${b.visitCount})`).join(', ')}`);
+                } else {
+                    addTest('Min Heap: Get Least Visited', false, 
+                        `Failed to get least visited bookmarks`);
+                }
+            } catch(e) {
+                addTest('Min Heap: Basic Operations', false, `Error: ${e.message}`);
+            }
+
+            // Display summary
+            const passed = results.filter(r => r.passed).length;
+            const total = results.length;
+            const summary = document.getElementById('summary');
+            summary.innerHTML = `
+                <strong>Test Summary:</strong><br>
+                ✅ Passed: ${passed}/${total}<br>
+                ❌ Failed: ${total - passed}/${total}<br>
+                Success Rate: ${((passed/total)*100).toFixed(1)}%
+            `;
+        }
+
+        // Run tests when page loads
+        window.addEventListener('DOMContentLoaded', runTests);
+    </script>
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSA Visualization</title>
+    <link rel="stylesheet" href="visual.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <a href="../frontend/index.html" class="btn-back">← Back to Manager</a>
+            <h1>Data Structure Visualization</h1>
+            <p class="subtitle">Step-by-step visual exploration of data structures</p>
+        </header>
+
+        <div class="main-content">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <h3>Choose Data Structure</h3>
+                <div class="dsa-selector">
+                    <button class="dsa-btn active" onclick="selectDSA('hashtable')">
+                        Hash Table
+                    </button>
+                    <button class="dsa-btn" onclick="selectDSA('trie')">
+                        Trie
+                    </button>
+                    <button class="dsa-btn" onclick="selectDSA('linkedlist')">
+                        Linked List
+                    </button>
+                    <button class="dsa-btn" onclick="selectDSA('minheap')">
+                        Min Heap
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Main Visualization -->
+            <main class="visualization">
+                <!-- Hash Table Visualization -->
+                <section id="hashtable-section" class="dsa-section active">
+                    <div class="section-header">
+                        <h2>Hash Table (Hash Map)</h2>
+                        <p class="time-complexity">Time: Insert O(1) | Lookup O(1) | Delete O(1)</p>
+                    </div>
+
+                    <div class="controls">
+                        <input type="text" id="hashInput" placeholder="Enter key (URL)" class="input-field">
+                        <button onclick="hashTableInsert()" class="btn-primary">Insert</button>
+                        <button onclick="hashTableSearch()" class="btn-primary">Search</button>
+                        <button onclick="hashTableReset()" class="btn-secondary">Reset</button>
+                    </div>
+
+                    <div class="visualization-area">
+                        <div class="description">
+                            <h4>How it works:</h4>
+                            <p>A hash table uses a hash function to map keys to indices in an array.</p>
+                            <p><strong>Hash Function:</strong> Convert string key → numeric index</p>
+                            <p><strong>Collision Handling:</strong> Linear probing (search next empty slot)</p>
+                            <p><strong>Use Case:</strong> Fast URL lookups in bookmark manager</p>
+                        </div>
+
+                        <div class="hash-table-visual">
+                            <div class="hash-slots" id="hashSlots"></div>
+                        </div>
+
+                        <div class="info-panel">
+                            <div class="info-item">
+                                <span class="label">Status:</span>
+                                <span id="hashStatus">Ready</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Operations:</span>
+                                <span id="hashOps">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Trie Visualization -->
+                <section id="trie-section" class="dsa-section">
+                    <div class="section-header">
+                        <h2>Trie (Prefix Tree)</h2>
+                        <p class="time-complexity">Time: Insert O(m) | Search O(m) | Prefix O(m+k)</p>
+                    </div>
+
+                    <div class="controls">
+                        <input type="text" id="trieInput" placeholder="Enter word to insert" class="input-field">
+                        <button onclick="trieInsert()" class="btn-primary">Insert</button>
+                        <button onclick="trieSearch()" class="btn-primary">Search Prefix</button>
+                        <button onclick="trieReset()" class="btn-secondary">Reset</button>
+                    </div>
+
+                    <div class="visualization-area">
+                        <div class="description">
+                            <h4>How it works:</h4>
+                            <p>A trie (prefix tree) stores strings efficiently for prefix matching.</p>
+                            <p><strong>Structure:</strong> Tree where each node = character</p>
+                            <p><strong>Path:</strong> Each root-to-leaf path = complete word</p>
+                            <p><strong>Use Case:</strong> Autocomplete search for bookmark titles</p>
+                        </div>
+
+                        <div class="trie-visual" id="trieVisual"></div>
+
+                        <div class="info-panel">
+                            <div class="info-item">
+                                <span class="label">Status:</span>
+                                <span id="trieStatus">Ready</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Words Stored:</span>
+                                <span id="trieCount">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Linked List Visualization -->
+                <section id="linkedlist-section" class="dsa-section">
+                    <div class="section-header">
+                        <h2>Singly Linked List</h2>
+                        <p class="time-complexity">Time: Insert O(1) | Search O(n) | Delete O(n)</p>
+                    </div>
+
+                    <div class="controls">
+                        <input type="text" id="llInput" placeholder="Enter value" class="input-field">
+                        <button onclick="llInsertFront()" class="btn-primary">Insert at Front</button>
+                        <button onclick="llDelete()" class="btn-primary">Delete</button>
+                        <button onclick="llReset()" class="btn-secondary">Reset</button>
+                    </div>
+
+                    <div class="visualization-area">
+                        <div class="description">
+                            <h4>How it works:</h4>
+                            <p>A linked list is a sequential chain of nodes, each pointing to the next.</p>
+                            <p><strong>Structure:</strong> Node = data + pointer to next node</p>
+                            <p><strong>Operations:</strong> Insert at front is O(1), search is O(n)</p>
+                            <p><strong>Use Case:</strong> Recently visited bookmarks (LIFO)</p>
+                        </div>
+
+                        <div class="linked-list-visual" id="llVisual"></div>
+
+                        <div class="info-panel">
+                            <div class="info-item">
+                                <span class="label">Status:</span>
+                                <span id="llStatus">Ready</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">List Size:</span>
+                                <span id="llSize">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Min Heap Visualization -->
+                <section id="minheap-section" class="dsa-section">
+                    <div class="section-header">
+                        <h2>Min Heap</h2>
+                        <p class="time-complexity">Time: Insert O(log n) | Extract Min O(log n) | Peek O(1)</p>
+                    </div>
+
+                    <div class="controls">
+                        <input type="number" id="heapInput" placeholder="Enter value" class="input-field" min="1" max="100">
+                        <button onclick="heapInsert()" class="btn-primary">Insert</button>
+                        <button onclick="heapExtractMin()" class="btn-primary">Extract Min</button>
+                        <button onclick="heapReset()" class="btn-secondary">Reset</button>
+                    </div>
+
+                    <div class="visualization-area">
+                        <div class="description">
+                            <h4>How it works:</h4>
+                            <p>A min heap is a complete binary tree where parent ≤ children.</p>
+                            <p><strong>Root:</strong> Always the minimum element</p>
+                            <p><strong>Operations:</strong> Insert and delete trigger heapify (bubble up/down)</p>
+                            <p><strong>Use Case:</strong> Track least frequently visited bookmarks</p>
+                        </div>
+
+                        <div class="heap-visual" id="heapVisual"></div>
+
+                        <div class="info-panel">
+                            <div class="info-item">
+                                <span class="label">Status:</span>
+                                <span id="heapStatus">Ready</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Heap Size:</span>
+                                <span id="heapSize">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+    <script src="../dsa/hashTable.js"></script>
+    <script src="../dsa/trie.js"></script>
+    <script src="../dsa/linkedList.js"></script>
+    <script src="../dsa/minHeap.js"></script>
+    <script src="visual.js"></script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intelligent Bookmark Manager</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>Bookmark Manager</h1>
+                <p class="subtitle">Smart bookmark management with data structure visualization</p>
+                <a href="../visualization/visual.html" class="btn-visualize" target="_blank">
+                    View Data Structure Visualization
+                </a>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Add Bookmark Form -->
+            <section class="section form-section">
+                <h2>Add New Bookmark</h2>
+                <form id="bookmarkForm" class="form">
+                    <div class="form-group">
+                        <label for="bookmarkTitle">Title</label>
+                        <input 
+                            type="text" 
+                            id="bookmarkTitle" 
+                            placeholder="e.g., GitHub" 
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bookmarkURL">URL</label>
+                        <input 
+                            type="url" 
+                            id="bookmarkURL" 
+                            placeholder="https://example.com" 
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bookmarkCategory">Category</label>
+                        <div class="category-input-group">
+                            <select id="bookmarkCategory" required>
+                                <option value="">Select or create category</option>
+                            </select>
+                            <input 
+                                type="text" 
+                                id="newCategory" 
+                                placeholder="New category (optional)"
+                            >
+                            <button type="button" id="addCategoryBtn" class="btn-secondary">Add Category</button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Save Bookmark</button>
+                </form>
+                <div id="formMessage" class="message"></div>
+            </section>
+
+            <!-- Search Section -->
+            <section class="section search-section">
+                <h2>Search Bookmarks</h2>
+                <div class="search-container">
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        placeholder="Start typing to search... (uses Trie for autocomplete)"
+                        class="search-input"
+                    >
+                    <div id="autocompleteDropdown" class="autocomplete-dropdown"></div>
+                </div>
+                <button id="clearSearchBtn" class="btn-secondary">Clear</button>
+            </section>
+
+            <!-- Filter by Category -->
+            <section class="section filter-section">
+                <h2>Filter by Category</h2>
+                <div id="categoryFilters" class="category-filters"></div>
+            </section>
+
+            <!-- Bookmarks Grid -->
+            <section class="section bookmarks-section">
+                <h2>All Bookmarks</h2>
+                <div class="sort-controls">
+                    <label>
+                        Sort by:
+                        <select id="sortSelect">
+                            <option value="recent">Most Recent</option>
+                            <option value="name">Name (A-Z)</option>
+                            <option value="visits">Most Visited</option>
+                        </select>
+                    </label>
+                    <span id="bookmarkCount" class="bookmark-count">0/100 bookmarks</span>
+                </div>
+                <div id="bookmarksList" class="bookmarks-grid"></div>
+            </section>
+
+            <!-- Recently Visited Section -->
+            <section class="section recent-section">
+                <h2>Recently Visited</h2>
+                <p class="section-desc">Latest 20 bookmarks accessed (stored as linked list)</p>
+                <div id="recentList" class="recent-list"></div>
+            </section>
+
+            <!-- Least Used Section -->
+            <section class="section least-section">
+                <h2>Least Visited Bookmarks</h2>
+                <p class="section-desc">Bookmarks with lowest visit counts (stored as min heap)</p>
+                <div id="leastUsedList" class="least-used-list"></div>
+            </section>
+
+            <!-- Statistics Section -->
+            <section class="section stats-section">
+                <h2>Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-label">Total Bookmarks</span>
+                        <span class="stat-value" id="statTotal">0</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Total Categories</span>
+                        <span class="stat-value" id="statCategories">0</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Recently Viewed</span>
+                        <span class="stat-value" id="statRecent">0</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Storage Used</span>
+                        <span class="stat-value" id="statStorage">0%</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Data Structures Lab Project | Bookmark Manager | Hash Table, Trie, Linked List, Min Heap</p>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../dsa/hashTable.js"></script>
+    <script src="../dsa/trie.js"></script>
+    <script src="../dsa/linkedList.js"></script>
+    <script src="../dsa/minHeap.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
